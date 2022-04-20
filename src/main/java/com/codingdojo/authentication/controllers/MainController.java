@@ -47,12 +47,22 @@ public class MainController {
 			return "index.jsp";
 		} 
 		session.setAttribute("userId", user.getId());
+		session.setAttribute("userName", user.getUserName());
 		return "redirect:/home";
 		
 	}
 	
 	@RequestMapping("/home")
-	public String home() {
+	public String home(HttpSession session, Model model) {
+		if(session.getAttribute("userId") == null) {
+			return "redirect:/";
+		}
+		model.addAttribute("userName", session.getAttribute("userName"));
 		return "home.jsp";
+	}
+	@RequestMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
 	}
 }
